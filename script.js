@@ -1,36 +1,53 @@
 document.addEventListener('DOMContentLoaded', function() {
     var dataFileInput = document.getElementById('dataFile');
 
-    if (!dataFileInput) {
+    if (dataFileInput) {
+        dataFileInput.addEventListener('change', handleFileSelect);
+    } else {
         console.error("Element with ID 'dataFile' not found.");
-        return;
     }
-
-    dataFileInput.addEventListener('change', handleFileSelect);
 
     function handleFileSelect(event) {
         const file = event.target.files[0];
-        if (!file) return;
 
-        const reader = new FileReader();
-        reader.onload = (e) => processData(e.target.result);
-        reader.readAsText(file);
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                processData(e.target.result);
+            };
+            reader.readAsText(file);
+        }
     }
 
     function updateAllCharts(labels, values) {
-        ['bar', 'line', 'radar', 'doughnut', 'pie', 'polarArea', 'bubble', 'scatter'].forEach((type, index) => {
-            createChart(`chart${index + 1}`, type, labels, values);
-        });
+        createChart('barChart', 'bar', labels, values);
+        createChart('lineChart', 'line', labels, values);
+        createChart('radarChart', 'radar', labels, values);
+        createChart('doughnutChart', 'doughnut', labels, values);
+        createChart('pieChart', 'pie', labels, values);
+        createChart('polarAreaChart', 'polarArea', labels, values);
+        createChart('bubbleChart', 'bubble', labels, values);
+        createChart('scatterChart', 'scatter', labels, values);
     }
 
     function createChart(canvasId, chartType, labels, values) {
         var canvas = document.getElementById(canvasId);
-        if (!canvas) return;
+
+        // Check if the canvas element exists
+        if (!canvas) {
+            console.error(`Canvas element with ID '${canvasId}' not found.`);
+            return;
+        }
 
         var ctx = canvas.getContext('2d');
-        if (!ctx) return;
 
-        new Chart(ctx, {
+        // Check if the context is available
+        if (!ctx) {
+            console.error(`Context not available for canvas with ID '${canvasId}'.`);
+            return;
+        }
+
+        var myChart = new Chart(ctx, {
             type: chartType,
             data: {
                 labels: labels,
@@ -43,9 +60,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 }]
             },
             options: {
-                scales: { y: { beginAtZero: true } },
-                responsive: true,
-                maintainAspectRatio: false
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+                // Additional chart options can be added here
             }
         });
     }
@@ -56,10 +76,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const values = [];
 
         rows.forEach((row, index) => {
-            if (row.trim() === '') return;
+            // Skip empty lines
+            if (row.trim() === '') {
+                return;
+            }
 
             const [label, value] = row.split(',');
 
+            // Check if the row has the expected format
             if (label !== undefined && value !== undefined) {
                 labels.push(label.trim());
                 values.push(parseFloat(value.trim()));
@@ -68,6 +92,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
+        // Update all charts
         updateAllCharts(labels, values);
     }
 });
+
