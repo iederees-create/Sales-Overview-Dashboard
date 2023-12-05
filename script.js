@@ -31,7 +31,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function createChart(canvasId, chartType, labels, values) {
-        var ctx = document.getElementById(canvasId).getContext('2d');
+        var canvas = document.getElementById(canvasId);
+
+        // Check if the canvas element exists
+        if (!canvas) {
+            console.error(`Canvas element with ID '${canvasId}' not found.`);
+            return;
+        }
+
+        var ctx = canvas.getContext('2d');
+
+        // Check if the context is available
+        if (!ctx) {
+            console.error(`Context not available for canvas with ID '${canvasId}'.`);
+            return;
+        }
+
         var myChart = new Chart(ctx, {
             type: chartType,
             data: {
@@ -61,6 +76,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const values = [];
 
         rows.forEach((row, index) => {
+            // Skip empty lines
+            if (row.trim() === '') {
+                return;
+            }
+
             const [label, value] = row.split(',');
 
             // Check if the row has the expected format
@@ -76,4 +96,3 @@ document.addEventListener('DOMContentLoaded', function() {
         updateAllCharts(labels, values);
     }
 });
-
