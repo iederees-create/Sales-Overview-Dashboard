@@ -5,14 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales Overview Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="script.js"></script> <!-- Include your new script.js file -->
+    <script src="script.js"></script>
 </head>
 <body>
     <h1>Sales Overview Dashboard</h1>
     
     <!-- File input for data upload -->
     <input type="file" id="dataFile" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
-    
-    <canvas id="salesChart" width="800" height="400"></canvas>
+
+    <!-- Canvas for each chart type -->
+    <canvas id="barChart" width="800" height="400"></canvas>
+    <canvas id="lineChart" width="800" height="400"></canvas>
+    <canvas id="radarChart" width="800" height="400"></canvas>
+    <canvas id="doughnutChart" width="800" height="400"></canvas>
+    <canvas id="pieChart" width="800" height="400"></canvas>
+    <canvas id="polarAreaChart" width="800" height="400"></canvas>
+    <canvas id="bubbleChart" width="800" height="400"></canvas>
+    <canvas id="scatterChart" width="800" height="400"></canvas>
 </body>
 </html>
