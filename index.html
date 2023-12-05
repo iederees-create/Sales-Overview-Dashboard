@@ -9,32 +9,69 @@
 <body>
     <h1>Sales Overview Dashboard</h1>
     
+    <!-- File input for data upload -->
+    <input type="file" id="dataFile" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+    
     <canvas id="salesChart" width="800" height="400"></canvas>
 
     <script>
-        // Add your JavaScript code for data visualization using Chart.js here
-        // Example:
-        var ctx = document.getElementById('salesChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May'],
-                datasets: [{
-                    label: 'Sales',
-                    data: [12, 19, 3, 5, 2],
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+        document.getElementById('dataFile').addEventListener('change', handleFileSelect);
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Parse the uploaded file data (assuming CSV for simplicity)
+                    const csvData = e.target.result;
+                    // Call a function to process and update the chart with the new data
+                    processData(csvData);
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function processData(csvData) {
+            // Add your code to parse and process the CSV data
+            // Update the chart with the new data
+            // Example: (assuming CSV data format: "label,value")
+            const rows = csvData.split('\n');
+            const labels = [];
+            const values = [];
+            rows.forEach(row => {
+                const [label, value] = row.split(',');
+                labels.push(label.trim());
+                values.push(parseFloat(value.trim()));
+            });
+
+            // Update the chart
+            updateChart(labels, values);
+        }
+
+        function updateChart(labels, values) {
+            var ctx = document.getElementById('salesChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Sales',
+                        data: values,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     </script>
 </body>
 </html>
