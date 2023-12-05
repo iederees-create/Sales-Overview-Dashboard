@@ -1,5 +1,3 @@
-// script.js
-
 document.addEventListener('DOMContentLoaded', function() {
     var dataFileInput = document.getElementById('dataFile');
 
@@ -21,6 +19,42 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function updateAllCharts(labels, values) {
+        createChart('barChart', 'bar', labels, values);
+        createChart('lineChart', 'line', labels, values);
+        createChart('radarChart', 'radar', labels, values);
+        createChart('doughnutChart', 'doughnut', labels, values);
+        createChart('pieChart', 'pie', labels, values);
+        createChart('polarAreaChart', 'polarArea', labels, values);
+        createChart('bubbleChart', 'bubble', labels, values);
+        createChart('scatterChart', 'scatter', labels, values);
+    }
+
+    function createChart(canvasId, chartType, labels, values) {
+        var ctx = document.getElementById(canvasId).getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: chartType,
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Sales',
+                    data: values,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+                // Additional chart options can be added here
+            }
+        });
+    }
+
     function processData(csvData) {
         const rows = csvData.split('\n');
         const labels = [];
@@ -38,31 +72,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Update the chart
-        updateChart(labels, values);
-    }
-
-    function updateChart(labels, values) {
-        var ctx = document.getElementById('salesChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Sales',
-                    data: values,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
+        // Update all charts
+        updateAllCharts(labels, values);
     }
 });
+
